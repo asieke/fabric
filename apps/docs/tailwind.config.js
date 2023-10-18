@@ -1,3 +1,5 @@
-const config = require('../../tailwind.config');
+// const config = require('../../tailwind.config');
 
-module.exports = config;
+import config from '../../tailwind.config';
+
+export default config;

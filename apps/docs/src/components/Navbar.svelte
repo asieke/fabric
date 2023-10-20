@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { sidebarShowing } from '$lib/stores';
 	import { Menu, Sun } from 'lucide-svelte';
+	import { Search } from 'lucide-svelte';
 
 	const toggle = () => {
 		sidebarShowing.update((v) => !v);
 	};
 	const darkMode = () => {
+		console.log('toggling');
 		//toggle dark class on the document element
 		document.documentElement.classList.toggle('dark');
 		//toggle dark mode in local storage
@@ -13,24 +15,24 @@
 	};
 </script>
 
-<nav class="h-full flex flex-row items-center justify-between px-4 bg-green-400 dark:bg-blue-500">
+<nav class="h-full flex flex-row items-center justify-between px-4 w-full dark:text-white">
 	<!-- Mobile  -->
-	<div class="flex flex-row space-x-3 md:hidden">
+	<div class="flex flex-row space-x-3 lg:hidden">
 		<button on:click={toggle}>
 			<Menu />
 		</button>
-		<div class="h-6 w-6 mt-[2px] rounded-lg shadow-md overflow-clip">
-			<img src="Logo.png" class="w-full h-full" alt="Logo" />
-		</div>
 		<div class="text-xl font-bold tracking-tighter">Fabric SDK</div>
 	</div>
 
 	<!-- Desktop -->
-	<div class="hidden md:flex flex-row">
+	<div class="hidden lg:flex flex-row">
 		<button
-			class="rounded-full bg-white border-[1px] w-64 py-2 px-3 text-xs flex flex-row text-slate-500"
+			class="rounded-full border-[1px] w-64 py-1 px-4 text-xs flex flex-row items-center justify-between text-slate-500 bg-white dark:bg-zinc-800/60 dark:border-zinc-700"
 		>
-			Find Something
+			<span class="flex flex-row items-center">
+				<Search class="h-[14px] w-[14px] mr-3" />Find Something
+			</span>
+			<span class="mr-2"> ⌘K</span>
 		</button>
 	</div>
 

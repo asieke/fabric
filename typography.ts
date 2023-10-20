@@ -16,9 +16,6 @@ export default function typographyStyles({ theme }: PluginUtils) {
         '--tw-prose-quotes': theme('colors.zinc.900'),
         '--tw-prose-quote-borders': theme('colors.zinc.200'),
         '--tw-prose-captions': theme('colors.zinc.500'),
-        '--tw-prose-code': theme('colors.zinc.900'),
-        '--tw-prose-code-bg': theme('colors.zinc.100'),
-        '--tw-prose-code-ring': theme('colors.zinc.300'),
         '--tw-prose-th-borders': theme('colors.zinc.300'),
         '--tw-prose-td-borders': theme('colors.zinc.200'),
 
@@ -34,9 +31,6 @@ export default function typographyStyles({ theme }: PluginUtils) {
         '--tw-prose-invert-quotes': theme('colors.zinc.100'),
         '--tw-prose-invert-quote-borders': theme('colors.zinc.700'),
         '--tw-prose-invert-captions': theme('colors.zinc.400'),
-        '--tw-prose-invert-code': theme('colors.white'),
-        '--tw-prose-invert-code-bg': theme('colors.zinc.700 / 0.15'),
-        '--tw-prose-invert-code-ring': theme('colors.white / 0.1'),
         '--tw-prose-invert-th-borders': theme('colors.zinc.600'),
         '--tw-prose-invert-td-borders': theme('colors.zinc.700'),
 
@@ -181,7 +175,7 @@ export default function typographyStyles({ theme }: PluginUtils) {
           fontWeight: '600',
           fontSize: theme('fontSize.lg')[0],
           ...theme('fontSize.lg')[1],
-          marginTop: theme('spacing.16'),
+          marginTop: theme('spacing.8'),
           marginBottom: theme('spacing.2')
         },
         h3: {
@@ -189,7 +183,7 @@ export default function typographyStyles({ theme }: PluginUtils) {
           fontSize: theme('fontSize.base')[0],
           ...theme('fontSize.base')[1],
           fontWeight: '600',
-          marginTop: theme('spacing.10'),
+          marginTop: theme('spacing.6'),
           marginBottom: theme('spacing.2')
         },
 

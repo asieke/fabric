@@ -5,6 +5,8 @@
 
 	$: currentPage = $page.url.pathname.substring(1);
 
+	$: console.log($page.data);
+
 	let links = [
 		{
 			title: 'Getting Started',
@@ -28,7 +30,7 @@
 </script>
 
 <nav class=" h-full p-8 prose dark:prose-invert">
-	<h3>Guides {currentPage}</h3>
+	<h3>Guides</h3>
 	<ul class="border-l-[2px] border-zinc-100 dark:border-zinc-800">
 		{#each links as { title, slug }}
 			<li class="relative">
@@ -40,9 +42,10 @@
 							<li
 								class="{$visibleSections.includes(section.toLowerCase().replace(/ /g, '-'))
 									? 'visible'
-									: ''} {$visibleSections[0] === section ? 'first' : ''} {$visibleSections[
-									$visibleSections.length - 1
-								] === section
+									: ''} {$visibleSections[0] === section.toLowerCase().replace(/ /g, '-')
+									? 'first'
+									: ''} {$visibleSections[$visibleSections.length - 1] ===
+								section.toLowerCase().replace(/ /g, '-')
 									? 'last'
 									: ''} my-0"
 							>

@@ -17,9 +17,7 @@
 				allSections.set([]);
 				//for each h2, find the parent section immediately above the h2 and add an ID to it
 				h2s.forEach((h2) => {
-					console.log(h2.innerText);
 					allSections.set([...$allSections, h2.innerText]);
-					console.log($allSections);
 					const section = h2.closest('section');
 					if (section) {
 						section.id = h2.innerText.toLowerCase().replace(/ /g, '-');

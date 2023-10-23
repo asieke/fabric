@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { CodeGroup } from '$components';
+
+	export let data;
+	console.log('getting started data: ', data)
 </script>
 
 # Getting Started

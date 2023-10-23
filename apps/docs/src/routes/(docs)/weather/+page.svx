@@ -1,0 +1,151 @@
+<script lang="ts">
+	import { CodeGroup } from '$components';
+</script>
+
+
+# Weather API
+
+The Update Todo List endpoint allows you to update an existing task or multiple tasks within a todo list. This endpoint provides flexibility to change the task name, description, due date, or completion status.
+
+## Introduction
+
+In any productive workflow, managing tasks is crucial. The Update Todo List endpoint offers a powerful tool to modify existing tasks in a todo list. Whether you need to change the task name, update the description, reschedule the due date, or update the completion status, this endpoint caters to your task management requirements efficiently.
+
+## Endpoint
+
+The Update Todo List endpoint URL is:
+
+```
+PUT /api/todo-list/:id
+```
+
+Replace `:id` with the unique identifier of the todo list or task you want to update.
+
+## HTTP Method
+
+The Update Todo List endpoint uses the HTTP PUT method to perform updates on the todo list.
+
+## Parameters
+
+The endpoint requires the following parameters:
+
+- `id` (required): The unique identifier of the todo list or task you want to update.
+
+## Request Headers
+
+The endpoint requires the following request header:
+
+- `Content-Type`: Use `application/json` for the request body.
+
+## Request Body
+
+The request body must be a JSON object containing the updated properties of the task(s) within the todo list. The properties that can be updated include:
+
+- `name` (optional): The new name of the task.
+- `description` (optional): The updated description of the task.
+- `dueDate` (optional): The new due date of the task.
+- `completed` (optional): The updated completion status of the task (`true` or `false`).
+
+## Response
+
+The Update Todo List endpoint returns a JSON object representing the updated task(s) within the todo list. The response includes the following properties:
+
+- `id`: The unique identifier of the updated task.
+- `name`: The name of the task.
+- `description`: The description of the task.
+- `dueDate`: The due date of the task.
+- `completed`: The completion status of the task.
+
+## Error Handling
+
+The Update Todo List endpoint can return the following error responses:
+
+- `400 Bad Request`: Indicates that the request was malformed or missing required parameters.
+- `401 Unauthorized`: Indicates that authentication is required to update the task(s) within the todo list.
+- `404 Not Found`: Indicates that the specified todo list or task does not exist.
+- `500 Internal Server Error`: Indicates a server-side error occurred.
+
+## Examples
+
+### Example 1: Update a Single Task
+
+**Request:**
+
+```
+PUT /api/todo-list/1234567890
+Content-Type: application/json
+
+{
+  "name": "Update Documentation",
+  "description": "Generate extensive Markdown documentation for an endpoint",
+  "dueDate": "2023-09-30",
+  "completed": true
+}
+```
+
+**Response:**
+
+```
+200 OK
+Content-Type: application/json
+
+{
+  "id": "1234567890",
+  "name": "Update Documentation",
+  "description": "Generate extensive Markdown documentation for an endpoint",
+  "dueDate": "2023-09-30",
+  "completed": true
+}
+```
+
+### Example 2: Update Multiple Tasks
+
+**Request:**
+
+```
+PUT /api/todo-list/987654321
+Content-Type: application/json
+
+[
+  {
+    "id": "task1",
+    "name": "Update Documentation",
+    "description": "Generate extensive Markdown documentation for an endpoint",
+    "dueDate": "2023-09-30",
+    "completed": true
+  },
+  {
+    "id": "task2",
+    "name": "Fix Bug",
+    "dueDate": "2023-10-10",
+    "completed": false
+  }
+]
+```
+
+**Response:**
+
+```json
+200 OK
+Content-Type: application/json
+
+[
+  {
+    "id": "task1",
+    "name": "Update Documentation",
+    "description": "Generate extensive Markdown documentation for an endpoint",
+    "dueDate": "2023-09-30",
+    "completed": true
+  },
+  {
+    "id": "task2",
+    "name": "Fix Bug",
+    "dueDate": "2023-10-10",
+    "completed": false
+  }
+]
+```
+
+## Conclusion
+
+The Update Todo List endpoint provides powerful functionality to modify existing tasks within a todo list. With the ability to update task details such as name, description, due date, and completion status, you can easily manage and track your tasks efficiently.

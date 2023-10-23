@@ -1,49 +1,60 @@
 <script lang="ts">
+	import { tick } from 'svelte';
+	import { allSections, visibleSections } from '$lib/stores';
 	import { page } from '$app/stores';
-	import type { Metadata } from '$lib/types';
-	import { visibleSections } from '$lib/stores';
 
-	const posts = $page.data.posts as Metadata[];
+	$: currentPage = $page.url.pathname.substring(1);
 
-	//get the page slug
-	$: pageSlug = $page.params.slug;
+	let links = [
+		{
+			title: 'Getting Started',
+			slug: 'getting-started'
+		},
+		{
+			title: 'SDK',
+			slug: 'sdk'
+		},
+		{
+			title: 'Weather',
+			slug: 'weather'
+		}
+	];
 
-	const scrollToSection = (id: string) => {
+	const scrollToSection = (section: string) => {
+		const id = section.toLowerCase().replace(/ /g, '-');
 		const el = document.getElementById(id);
 		el?.scrollIntoView({ block: 'start' });
 	};
 </script>
 
-{#if posts}
-	<nav class=" h-full p-8 prose dark:prose-invert">
-		<h3>Guides</h3>
-
-		<ul class="border-l-[2px] border-zinc-100 dark:border-zinc-800">
-			{#each posts as { title, headings, slug }}
-				<li class="relative">
-					<a href="/{slug}">{title}</a>
-					{#if slug === pageSlug}
-						<div class="absolute top-1 -left-[6px] bg-emerald-500 w-[2px] h-5" />
-						<ul>
-							{#each headings as text}
-								<li
-									class="{$visibleSections.includes(text) ? 'visible' : ''} {$visibleSections[0] ===
-									text
-										? 'first'
-										: ''} {$visibleSections[$visibleSections.length - 1] === text
-										? 'last'
-										: ''} my-0"
-								>
-									<button on:click={() => scrollToSection(text)}>{text}</button>
-								</li>
-							{/each}
-						</ul>
-					{/if}
-				</li>
-			{/each}
-		</ul>
-	</nav>
-{/if}
+<nav class=" h-full p-8 prose dark:prose-invert">
+	<h3>Guides {currentPage}</h3>
+	<ul class="border-l-[2px] border-zinc-100 dark:border-zinc-800">
+		{#each links as { title, slug }}
+			<li class="relative">
+				<a href="/{slug}">{title}</a>
+				{#if slug === currentPage}
+					<div class="absolute top-1 -left-[6px] bg-emerald-500 w-[2px] h-5" />
+					<ul>
+						{#each $allSections as section}
+							<li
+								class="{$visibleSections.includes(section.toLowerCase().replace(/ /g, '-'))
+									? 'visible'
+									: ''} {$visibleSections[0] === section ? 'first' : ''} {$visibleSections[
+									$visibleSections.length - 1
+								] === section
+									? 'last'
+									: ''} my-0"
+							>
+								<button on:click={() => scrollToSection(section)}>{section}</button>
+							</li>
+						{/each}
+					</ul>
+				{/if}
+			</li>
+		{/each}
+	</ul>
+</nav>
 
 <style lang="postcss">
 	ul {

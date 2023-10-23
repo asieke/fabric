@@ -1,16 +1,33 @@
 <script lang="ts">
 	import '$styles/app.css';
 	import { Sidebar, Navbar, Background, Footer } from '$components';
-	import { sidebarShowing, visibleSections } from '$lib/stores';
-	import { onMount } from 'svelte';
+	import { sidebarShowing, visibleSections, allSections } from '$lib/stores';
+	import { onMount, tick } from 'svelte';
 	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 
 	let main: HTMLDivElement;
 
-	$: {
-		const slug = $page.params.slug;
-		getVisibleSections();
-	}
+	let currentPage = $page.route.id;
+
+	const updateSectionIds = async () => {
+		tick().then(() => {
+			if (browser) {
+				const h2s = document.querySelectorAll('h2');
+				allSections.set([]);
+				//for each h2, find the parent section immediately above the h2 and add an ID to it
+				h2s.forEach((h2) => {
+					console.log(h2.innerText);
+					allSections.set([...$allSections, h2.innerText]);
+					console.log($allSections);
+					const section = h2.closest('section');
+					if (section) {
+						section.id = h2.innerText.toLowerCase().replace(/ /g, '-');
+					}
+				});
+			}
+		});
+	};
 
 	const getVisibleSections = () => {
 		//return an array of strings with the ids of the sections that are currently visible
@@ -37,6 +54,14 @@
 			});
 		}
 	});
+
+	$: {
+		currentPage = $page.route.id;
+		console.log(currentPage);
+		updateSectionIds().then(() => {
+			getVisibleSections();
+		});
+	}
 </script>
 
 <!-- Mobile Sidebar -->

@@ -1,13 +1,13 @@
 //mdsvex.config.js
 import remarkHtml from 'remark-html';
+import sectionize from 'remark-sectionize';
 
 const config = {
-	layout: './src/markdown/Layout.svelte',
 	extensions: ['.svx', '.md'],
 	smartypants: {
 		dashes: 'oldschool'
 	},
-	remarkPlugins: [remarkHtml]
+	remarkPlugins: [remarkHtml, sectionize]
 };
 
 export default config;

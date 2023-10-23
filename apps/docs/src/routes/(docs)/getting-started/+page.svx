@@ -4,6 +4,10 @@
 
 # Getting Started
 
+This is the best page on the internet
+
+## Code
+
 <CodeGroup langs={['bash','javascript','php']}>
 
 ```bash

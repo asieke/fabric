@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { allSections, visibleSections } from '$lib/stores';
+	import { sections, visibleIds } from '$lib/stores';
 	import { page } from '$app/stores';
 
 	$: currentPage = $page.url.pathname.substring(1);
@@ -38,18 +38,13 @@
 				{#if slug === currentPage}
 					<div class="absolute top-1 -left-[6px] bg-emerald-500 w-[2px] h-5" />
 					<ul>
-						{#each $allSections as section}
+						{#each $sections as { title, id }}
 							<li
-								class="{$visibleSections.includes(section.toLowerCase().replace(/ /g, '-'))
-									? 'visible'
-									: ''} {$visibleSections[0] === section.toLowerCase().replace(/ /g, '-')
+								class="{$visibleIds.includes(id) ? 'visible' : ''} {$visibleIds[0] === id
 									? 'first'
-									: ''} {$visibleSections[$visibleSections.length - 1] ===
-								section.toLowerCase().replace(/ /g, '-')
-									? 'last'
-									: ''} my-0"
+									: ''} {$visibleIds[$visibleIds.length - 1] === id ? 'last' : ''} my-0"
 							>
-								<button on:click={() => scrollToSection(section)}>{section}</button>
+								<button on:click={() => scrollToSection(id)}>{title}</button>
 							</li>
 						{/each}
 					</ul>

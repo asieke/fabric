@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '$styles/app.css';
 	import { Sidebar, Navbar, Background, Footer } from '$components';
-	import { sidebarShowing, visibleSections, allSections } from '$lib/stores';
+	import { sidebarShowing, visibleIds, sections } from '$lib/stores';
 	import { onMount, tick } from 'svelte';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
@@ -14,10 +14,13 @@
 		tick().then(() => {
 			if (browser) {
 				const h2s = document.querySelectorAll('h2');
-				allSections.set([]);
+				sections.set([]);
 				//for each h2, find the parent section immediately above the h2 and add an ID to it
 				h2s.forEach((h2) => {
-					allSections.set([...$allSections, h2.innerText]);
+					sections.set([
+						...$sections,
+						{ title: h2.innerText, id: h2.innerText.toLowerCase().replace(/ /g, '-') }
+					]);
 					const section = h2.closest('section');
 					if (section) {
 						section.id = h2.innerText.toLowerCase().replace(/ /g, '-');
@@ -41,7 +44,7 @@
 				}
 				visible.push(section.id);
 			}
-			visibleSections.set(visible);
+			visibleIds.set(visible);
 		} catch (e) {}
 	};
 

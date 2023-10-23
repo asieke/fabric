@@ -2,5 +2,10 @@ import { writable } from 'svelte/store';
 
 export const sidebarShowing = writable(false);
 
-export const visibleSections = writable<string[]>([]);
-export const allSections = writable<string[]>([]);
+type Section = {
+	id: string;
+	title: string;
+};
+
+export const visibleIds = writable<string[]>([]);
+export const sections = writable<Section[]>([]);

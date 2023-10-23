@@ -12,7 +12,8 @@ const config = {
 			$styles: 'src/styles',
 			$components: 'src/components',
 			$lib: 'src/lib',
-			$pages: 'src/pages'
+			$pages: 'src/pages',
+			$markdown: 'src/markdown'
 		}
 	},
 	preprocess: [vitePreprocess(), mdsvex(mdsvexConfig)]

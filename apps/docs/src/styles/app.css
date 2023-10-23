@@ -12,25 +12,22 @@ section {
 	@apply my-0 py-0;
 }
 
-pre {
-	@apply bg-zinc-900 text-zinc-200 p-3 rounded-md shadow-md;
-}
-
-code {
-	@apply bg-zinc-900 text-zinc-200;
-}
-
 /* Code blocks */
 pre[class*='language-'] {
-	padding: 1em;
-	margin: 0.5em 0;
 	overflow: auto;
-	border-radius: 0.3em;
+	@apply rounded-md my-2 py-3 px-4;
+}
+
+.code-group pre {
+	@apply hidden rounded-t-none rounded-b-md mt-0;
+}
+.code-group pre:first-of-type {
+	@apply block;
 }
 
 :not(pre) > code[class*='language-'],
 pre[class*='language-'] {
-	background: #1d1f21;
+	@apply bg-zinc-700 dark:bg-zinc-900 text-zinc-100;
 }
 
 /* Inline code */

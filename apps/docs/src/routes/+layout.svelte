@@ -75,7 +75,7 @@
 		<!-- Main Page -->
 		<main class="flex-grow prose dark:prose-invert relative">
 			<Background />
-			<div class="my-16 p-8 absolute">
+			<div class="my-16 p-8 absolute w-full">
 				<div class="flex flex-col min-h-[calc(100vh-128px)]">
 					<div class="flex-grow">
 						<slot />
@@ -99,6 +99,10 @@
 			} else {
 				document.documentElement.classList.remove('dark');
 			}
+		}
+
+		function toggle() {
+			let language = 'javascript';
 		}
 	</script>
 </svelte:head>

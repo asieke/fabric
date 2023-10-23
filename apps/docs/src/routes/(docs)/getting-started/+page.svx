@@ -1,0 +1,31 @@
+<script lang="ts">
+	import { CodeGroup } from '$components';
+</script>
+
+# Getting Started
+
+<CodeGroup langs={['bash','javascript','php']}>
+
+```bash
+#how to do all the things
+mkdir my_directory
+cd my_directory
+touch my_file.txt
+nano my_file.txt
+```
+
+```javascript
+for (let i = 0; i < 5; i++) {
+	console.log('number: ', i);
+}
+```
+
+```php
+for ($i = 0; $i < 5; $i++) {
+	echo $i;
+}
+```
+
+</CodeGroup>
+
+We are crusing

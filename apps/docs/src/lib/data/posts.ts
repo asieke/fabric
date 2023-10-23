@@ -40,21 +40,9 @@ export const getPost = async (slug: string) => {
 		// in the rendered html, replace all <h2> with the following pattern:
 		// <h2>Title</h2> -> <h2 id="Title">Title</h2>
 
-		const arr = ('<section>' + html + '</section>').split('<h2');
-
-		console.log(arr);
-
-		for (let i = 0; i < arr.length - 1; i++) {
-			//' data-svelte-h="svelte-pzb38e">Guide</h2> <-- get the Guide from strings like this
-			const inner = arr[i + 1].split('">')[1].split('</h2>')[0];
-			arr[i] = arr[i] + `</section><section id="${inner}">`;
-		}
-
-		const parsedHTML = arr.join('<h2');
-
 		return {
 			slug: slug,
-			html: parsedHTML,
+			html: html,
 			metadata: metadata
 		};
 	} catch (e) {

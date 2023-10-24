@@ -2,51 +2,13 @@
 	import '$styles/app.css';
 	import { Sidebar, Navbar, Background, Footer } from '$components';
 	import { sidebarShowing, visibleIds, sections } from '$lib/stores';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { browser } from '$app/environment';
+	import { getVisibleSections, updateSectionIds } from '$lib/dom';
 
 	let main: HTMLDivElement;
 
 	let currentPage = $page.route.id;
-
-	const updateSectionIds = async () => {
-		tick().then(() => {
-			if (browser) {
-				const h2s = document.querySelectorAll('h2');
-				sections.set([]);
-				//for each h2, find the parent section immediately above the h2 and add an ID to it
-				h2s.forEach((h2) => {
-					sections.set([
-						...$sections,
-						{ title: h2.innerText, id: h2.innerText.toLowerCase().replace(/ /g, '-') }
-					]);
-					const section = h2.closest('section');
-					if (section) {
-						section.id = h2.innerText.toLowerCase().replace(/ /g, '-');
-					}
-				});
-			}
-		});
-	};
-
-	const getVisibleSections = () => {
-		//return an array of strings with the ids of the sections that are currently visible
-		try {
-			const sections = document.querySelectorAll('section');
-			const visible = [];
-			for (let i = 0; i < sections.length; i++) {
-				const section = sections[i];
-				const rect = section.getBoundingClientRect();
-
-				if (rect.bottom <= 50 || rect.top >= window.innerHeight - 50 || section.id === '') {
-					continue;
-				}
-				visible.push(section.id);
-			}
-			visibleIds.set(visible);
-		} catch (e) {}
-	};
 
 	onMount(() => {
 		if (main) {
@@ -58,7 +20,6 @@
 
 	$: {
 		currentPage = $page.route.id;
-		console.log(currentPage);
 		updateSectionIds().then(() => {
 			getVisibleSections();
 		});
@@ -125,10 +86,6 @@
 			} else {
 				document.documentElement.classList.remove('dark');
 			}
-		}
-
-		function toggle() {
-			let language = 'javascript';
 		}
 	</script>
 </svelte:head>

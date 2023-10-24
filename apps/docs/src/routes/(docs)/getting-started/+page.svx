@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CodeGroup } from '$components';
+	import { CodeGroup, Row, Column } from '$components';
 
 	export let data;
 	console.log('getting started data: ', data)
@@ -11,6 +11,11 @@ This is the best page on the internet
 
 ## Code
 
+<Row>
+<Column>
+In any productive workflow, managing tasks is crucial. The Update Todo List endpoint offers a powerful tool to modify existing tasks in a todo list. Whether you need to change the task name, update the description, reschedule the due date, or update the completion status, this endpoint caters to your task management requirements efficiently.
+</Column>
+<Column>
 <CodeGroup langs={['bash','javascript','php']}>
 
 ```bash
@@ -34,5 +39,7 @@ for ($i = 0; $i < 5; $i++) {
 ```
 
 </CodeGroup>
+</Column>
+</Row>
 
 We are crusing

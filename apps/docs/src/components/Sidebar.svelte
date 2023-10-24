@@ -5,8 +5,6 @@
 
 	$: currentPage = $page.url.pathname.substring(1);
 
-	$: console.log($page.data);
-
 	let links = [
 		{
 			title: 'Getting Started',

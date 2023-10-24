@@ -38,6 +38,9 @@ importers:
 
   apps/docs:
     dependencies:
+      lunr:
+        specifier: ^2.3.9
+        version: 2.3.9
       remark:
         specifier: ^15.0.1
         version: 15.0.1
@@ -60,6 +63,9 @@ importers:
       '@sveltejs/kit':
         specifier: ^1.20.4
         version: 1.25.2(svelte@4.2.1)(vite@4.5.0)
+      '@types/lunr':
+        specifier: ^2.3.6
+        version: 2.3.6
       '@types/node':
         specifier: ^20.8.7
         version: 20.8.7
@@ -573,6 +579,10 @@ packages:
 
   /@types/json-schema@7.0.14:
     resolution: {integrity: sha512-U3PUjAudAdJBeC2pgN8uTIKgxrb4nlDF3SF0++EldXQvQBGkpFZMSnwQiIoDU77tv45VgNkl/L4ouD+rEomujw==}
+    dev: true
+
+  /@types/lunr@2.3.6:
+    resolution: {integrity: sha512-gNcIX3YUvGrfEtL98j/YjIMWqwThoJok3Vm4uqTRfg2xeAkIb1TT7eQrB20zzA/2mPG7XTkLPxLxkJIV1o/cVw==}
     dev: true
 
   /@types/mdast@4.0.2:
@@ -1806,6 +1816,10 @@ packages:
     dependencies:
       svelte: 4.2.1
     dev: true
+
+  /lunr@2.3.9:
+    resolution: {integrity: sha512-zTU3DaZaF3Rt9rhN3uBMGQD3dD2/vFQqnvZCDv4dl5iOzq2IZQqTxu90r4E5J+nP70J3ilqVCrbho2eWaeW8Ow==}
+    dev: false
 
   /magic-string@0.27.0:
     resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}

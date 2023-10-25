@@ -4,7 +4,6 @@
 	import type { Section } from '$lib/types';
 	import { onMount, tick } from 'svelte';
 	import { Search } from 'lucide-svelte';
-	import { subtract } from 'exact-search';
 	// import MiniSearch from 'minisearch';
 
 	let input: HTMLInputElement;
@@ -26,7 +25,7 @@
 	// const index = new Index('score');
 
 	const getResults = (query: string) => {
-		return subtract(1, 3);
+		console.log(sections);
 	};
 
 	const handleClickOutside = () => {

@@ -1,25 +1,32 @@
 import fs from 'fs';
 import path from 'path';
 import { compile } from 'mdsvex';
-import lunr from 'lunr';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import remarkHtml from 'remark-html';
+import sectionize from 'remark-sectionize';
+import { convert } from 'html-to-text';
+import type { Section } from './types';
+
+const config = {
+	extensions: ['.svx', '.md'],
+	smartypants: {
+		dashes: 'oldschool'
+	},
+	remarkPlugins: [remarkHtml, sectionize]
+};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-let documents: {
-	id: number;
-	content: string;
-	title: string;
-	slug: string;
-	sectionId: string;
-}[] = [];
+export const getSearchIndex = async () => {
+	let id = 0;
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
 
-const readSVX = async () => {
+	const sections: Section[] = [];
+
 	const folders = fs.readdirSync(path.join(__dirname, '../routes/(docs)/'));
-
-	let index = 0;
 
 	for (let i = 0; i < folders.length; i++) {
 		const file = fs.readFileSync(
@@ -27,62 +34,27 @@ const readSVX = async () => {
 			'utf-8'
 		);
 
-		const content = '# ' + file.split('# ').slice(1).join('# ');
-		const arr = content.split('\n');
+		const slug = folders[i];
 
-		let temp = '';
-		let title = '';
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		const code = (await compile(file, config)).code as string;
+		const sectionRegex = /<section id="([^"]+)">([\s\S]*?)<\/section>/g;
+		let match;
+		while ((match = sectionRegex.exec(code)) !== null) {
+			const sectionId = match[1];
+			const contentWithTags = match[2];
 
-		for (let j = 0; j < arr.length; j++) {
-			const line = arr[j];
-			if (line.startsWith('## ') || j === arr.length - 1) {
-				documents.push({
-					id: index,
-					title: title.length > 3 ? title.substring(3) : title,
-					sectionId: (title.length > 3 ? title.substring(3) : title)
-						.toLowerCase()
-						.replace(/ /g, '-'),
-					content: temp,
-					slug: folders[i]
-				});
-				index++;
-				temp = line + '\n';
-				title = line;
-			} else {
-				temp += line + '\n';
-			}
+			// Find the section title (h2 tag)
+			const h2Match = contentWithTags.match(/<h2>(.*?)<\/h2>/);
+			const title = h2Match ? h2Match[1] : '';
+
+			const content = convert(contentWithTags);
+
+			sections.push({ id, slug, sectionId, title, content });
+			id++;
 		}
 	}
 
-	const idx = lunr(function () {
-		this.ref('id');
-		this.field('content');
-		this.field('title');
-
-		documents.forEach((doc) => {
-			this.add(doc);
-		}, this);
-	});
-
-	return { idx, documents };
+	return sections;
 };
-
-export async function search(query: string) {
-	documents = [];
-	const { idx, documents: docs } = await readSVX();
-	const results = idx.search(query);
-
-	return {
-		documents: docs,
-		results: results.map((result) => {
-			const doc = documents[parseInt(result.ref)];
-			return {
-				ref: parseInt(result.ref),
-				sectionId: doc.sectionId,
-				title: doc.title,
-				slug: doc.slug,
-				score: result.score
-			};
-		})
-	};
-}

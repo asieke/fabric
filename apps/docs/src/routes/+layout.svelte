@@ -1,38 +1,37 @@
 <script lang="ts">
 	import '$styles/app.css';
-	import { Sidebar, Navbar, Background, Footer } from '$components';
-	import { sidebarShowing, visibleIds, sections } from '$lib/stores';
-	import { onMount } from 'svelte';
+	import { Sidebar, Navbar, Background, Footer, Search } from '$components';
+	import { sidebarShowing, visibleIds } from '$lib/stores';
+	import { onDestroy, onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { getVisibleSections, updateSectionIds } from '$lib/dom';
+	import { getVisibleSections } from '$lib/dom';
 
 	let main: HTMLDivElement;
+	let currentPage: string;
 
-	let currentPage = $page.route.id;
+	export let data;
+
+	const { sections } = data;
+
+	// Add your code here that you want to run when the page route ID changes
+	$: {
+		currentPage = $page.route.id?.split('/').pop() || '';
+		getVisibleSections();
+	}
 
 	onMount(() => {
-		if (main) {
-			main.addEventListener('scroll', (e) => {
-				getVisibleSections();
-			});
-		}
+		main.addEventListener('scroll', getVisibleSections);
 	});
-
-	$: {
-		currentPage = $page.route.id;
-		updateSectionIds().then(() => {
-			getVisibleSections();
-		});
-	}
 </script>
 
+<Search {sections} />
 <!-- Mobile Sidebar -->
 <div
 	class="absolute z-50 w-[360px] transition-all ease-in-out duration-500 {$sidebarShowing
 		? 'translate-x-0'
 		: '-translate-x-[360px]'} top-16 h-[calc(100vh-64px)] lg:hidden overflow-scroll border-r-[1px] border-zinc-300 dark:border-zinc-800 shadow-lg bg-white dark:bg-zinc-900"
 >
-	<Sidebar />
+	<Sidebar {sections} />
 </div>
 
 <!-- Mobile Screen -->
@@ -47,7 +46,7 @@
 	<div
 		class="hidden lg:block border-r-[1px] border-zinc-300 dark:border-zinc-800 overflow-y-scroll h-screen"
 	>
-		<Sidebar />
+		<Sidebar {sections} />
 	</div>
 
 	<!-- Main Content -->

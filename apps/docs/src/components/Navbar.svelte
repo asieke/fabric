@@ -1,17 +1,20 @@
 <script lang="ts">
-	import { sidebarShowing } from '$lib/stores';
-	import { Menu, Sun } from 'lucide-svelte';
-	import { Search } from 'lucide-svelte';
+	import { sidebarShowing, searchShowing } from '$lib/stores';
+	import { Menu, Sun, Search } from 'lucide-svelte';
 
 	const toggle = () => {
 		sidebarShowing.update((v) => !v);
 	};
+
 	const darkMode = () => {
-		console.log('toggling');
 		//toggle dark class on the document element
 		document.documentElement.classList.toggle('dark');
 		//toggle dark mode in local storage
 		localStorage.theme = localStorage.theme === 'dark' ? '' : 'dark';
+	};
+
+	const toggleSearch = () => {
+		searchShowing.update((v) => !v);
 	};
 </script>
 
@@ -27,6 +30,7 @@
 	<!-- Desktop -->
 	<div class="hidden lg:flex flex-row">
 		<button
+			on:click={toggleSearch}
 			class="rounded-full border-[1px] w-64 py-1 px-4 text-xs flex flex-row items-center justify-between text-slate-500 bg-white dark:bg-zinc-800/60 dark:border-zinc-700"
 		>
 			<span class="flex flex-row items-center">

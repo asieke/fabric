@@ -1,26 +1,5 @@
-import { tick } from 'svelte';
 import { browser } from '$app/environment';
-import { visibleIds, sections } from '$lib/stores';
-
-export const updateSectionIds = async () => {
-	tick().then(() => {
-		if (browser) {
-			const h2s = document.querySelectorAll('h2');
-			sections.set([]);
-			//for each h2, find the parent section immediately above the h2 and add an ID to it
-			h2s.forEach((h2) => {
-				sections.update((sections) => [
-					...sections,
-					{ title: h2.innerText, id: h2.innerText.toLowerCase().replace(/ /g, '-') }
-				]);
-				const section = h2.closest('section');
-				if (section) {
-					section.id = h2.innerText.toLowerCase().replace(/ /g, '-');
-				}
-			});
-		}
-	});
-};
+import { visibleIds } from '$lib/stores';
 
 export const getVisibleSections = () => {
 	//return an array of strings with the ids of the sections that are currently visible
@@ -39,3 +18,16 @@ export const getVisibleSections = () => {
 		visibleIds.set(visible);
 	}
 };
+
+export function clickOutside(node: HTMLElement, handler: () => void): { destroy: () => void } {
+	const onClick = (event: MouseEvent) =>
+		node && !node.contains(event.target as HTMLElement) && !event.defaultPrevented && handler();
+
+	document.addEventListener('click', onClick, true);
+
+	return {
+		destroy() {
+			document.removeEventListener('click', onClick, true);
+		}
+	};
+}

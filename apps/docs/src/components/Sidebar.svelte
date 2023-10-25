@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { sections, visibleIds } from '$lib/stores';
+	import { visibleIds } from '$lib/stores';
 	import { page } from '$app/stores';
+	import type { Section } from '$lib/types';
 
-	$: currentPage = $page.url.pathname.substring(1);
+	export let sections: Section[];
+
+	//get the current page url
+	$: currentPage = $page.route.id?.split('/').pop();
+	$: currentSections = sections.filter((section) => section.slug === currentPage);
 
 	let links = [
 		{
@@ -21,36 +26,40 @@
 	];
 
 	const scrollToSection = (section: string) => {
+		console.log(section);
 		const id = section.toLowerCase().replace(/ /g, '-');
 		const el = document.getElementById(id);
 		el?.scrollIntoView({ block: 'start' });
 	};
 </script>
 
-<nav class=" h-full p-8 prose dark:prose-invert">
-	<h3>Guides</h3>
-	<ul class="border-l-[2px] border-zinc-100 dark:border-zinc-800">
-		{#each links as { title, slug }}
-			<li class="relative">
-				<a href="/{slug}">{title}</a>
-				{#if slug === currentPage}
-					<div class="absolute top-1 -left-[6px] bg-emerald-500 w-[2px] h-5" />
-					<ul>
-						{#each $sections as { title, id }}
-							<li
-								class="{$visibleIds.includes(id) ? 'visible' : ''} {$visibleIds[0] === id
-									? 'first'
-									: ''} {$visibleIds[$visibleIds.length - 1] === id ? 'last' : ''} my-0"
-							>
-								<button on:click={() => scrollToSection(id)}>{title}</button>
-							</li>
-						{/each}
-					</ul>
-				{/if}
-			</li>
-		{/each}
-	</ul>
-</nav>
+{#if sections}
+	<nav class=" h-full p-8 prose dark:prose-invert">
+		<h3>Guides</h3>
+		<ul class="border-l-[2px] border-zinc-100 dark:border-zinc-800">
+			{#each links as { title, slug }}
+				<li class="relative">
+					<a href="/{slug}">{title}</a>
+					{#if slug === currentPage}
+						<div class="absolute top-1 -left-[6px] bg-emerald-500 w-[2px] h-5" />
+						<ul>
+							{#each currentSections as { title, sectionId }}
+								<li
+									class="{$visibleIds.includes(sectionId) ? 'visible' : ''} {$visibleIds[0] ===
+									sectionId
+										? 'first'
+										: ''} {$visibleIds[$visibleIds.length - 1] === sectionId ? 'last' : ''} my-0"
+								>
+									<button on:click={() => scrollToSection(sectionId)}>{title}</button>
+								</li>
+							{/each}
+						</ul>
+					{/if}
+				</li>
+			{/each}
+		</ul>
+	</nav>
+{/if}
 
 <style lang="postcss">
 	ul {

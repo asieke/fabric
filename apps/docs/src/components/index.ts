@@ -6,3 +6,4 @@ export { default as GridPattern } from './GridPattern.svelte';
 export { default as CodeGroup } from './CodeGroup.svelte';
 export { default as Row } from './Row.svelte';
 export { default as Column } from './Column.svelte';
+export { default as Search } from './Search.svelte';

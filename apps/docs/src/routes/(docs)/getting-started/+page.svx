@@ -1,8 +1,5 @@
 <script lang="ts">
 	import { CodeGroup, Row, Column } from '$components';
-
-	export let data;
-	console.log('getting started data: ', data)
 </script>
 
 # Getting Started
@@ -42,4 +39,6 @@ for ($i = 0; $i < 5; $i++) {
 </Column>
 </Row>
 
-We are crusing
+## The Boys!
+
+We are crushing it

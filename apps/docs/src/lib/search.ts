@@ -20,6 +20,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const getSearchIndex = async () => {
+	console.log('FILENAME: ', __filename);
+	console.log('DIRNAME', __dirname);
+
 	let id = 0;
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore

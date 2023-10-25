@@ -27,6 +27,7 @@
 
 	const getResults = (query: string) => {
 		return subtract(1, 3);
+		console.log(sections);
 	};
 
 	const handleClickOutside = () => {

@@ -4,10 +4,14 @@
 	import type { Section } from '$lib/types';
 	import { onMount, tick } from 'svelte';
 	import { Search } from 'lucide-svelte';
+	import { ExactSearch } from 'exact-search';
 	// import MiniSearch from 'minisearch';
 
 	let input: HTMLInputElement;
+	let index: ExactSearch;
 	export let sections: Section[];
+
+	console.log(sections);
 
 	// let miniSearch = new MiniSearch({
 	// 	fields: ['title', 'content'], // fields to index for full-text search
@@ -25,7 +29,7 @@
 	// const index = new Index('score');
 
 	const getResults = (query: string) => {
-		console.log(sections);
+		return index.search(query);
 	};
 
 	const handleClickOutside = () => {
@@ -47,14 +51,18 @@
 				searchShowing.update((v) => !v);
 			}
 		});
-		// miniSearch.addAll(sections);
+		index = new ExactSearch({
+			data: sections,
+			indexFields: ['title', 'content'],
+			resultFields: ['title', 'slug', 'sectionId']
+		});
 	});
 
 	const search = () => {
 		if (input) {
 			// const results = miniSearch.search(query);
 			const results = getResults(input.value);
-			console.log(results);
+			console.log('Search Results', results);
 		}
 	};
 </script>

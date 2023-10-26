@@ -1,12 +1,4 @@
-type Section = {
-  id: number;
-  slug: string;
-  sectionId: string;
-  title: string;
-  content: string;
-};
-
-export const sections: Section[] = [
+export const sections = [
   {
     id: 0,
     slug: 'getting-started',

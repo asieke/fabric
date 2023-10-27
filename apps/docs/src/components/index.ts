@@ -7,3 +7,4 @@ export { default as CodeGroup } from './CodeGroup.svelte';
 export { default as Row } from './Row.svelte';
 export { default as Column } from './Column.svelte';
 export { default as Search } from './Search.svelte';
+export { default as SearchResults } from './SearchResults.svelte';

@@ -20,28 +20,28 @@ var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 
 // src/search.ts
 var Search = class {
-  constructor({ data, indexFields, resultFields, indexWeights = [] }) {
+  constructor({ data, indexFields, resultFields }) {
     this.data = data;
     this.indexFields = indexFields;
     this.resultFields = resultFields;
-    this.indexWeights = indexWeights.length > 0 ? indexWeights : new Array(indexFields.length).fill(1);
   }
-  search(query) {
+  search(query, limit = 10) {
     const results = [];
     this.data.forEach((item) => {
-      let temp = { match: null, score: 0, count: null };
-      this.indexFields.forEach((field, i) => {
-        const startIndex = item[field].toLowerCase().indexOf(query.toLowerCase());
-        if (startIndex !== -1) {
-          const count = item[field].toLowerCase().split(query.toLowerCase()).length - 1;
+      let temp = { match: null, score: 0 };
+      this.indexFields.forEach((field) => {
+        const regex = new RegExp(`\\b${query}`, "i");
+        const match = item[field].match(regex);
+        if (match) {
+          const startIndex = match.index;
+          const count = item[field].toLowerCase().split(regex).length - 1;
           const words = item[field].split(" ").length;
           this.resultFields.forEach((resultField) => {
             temp[resultField] = item[resultField];
           });
-          const substr = item[field].substring(startIndex, startIndex + 20);
+          const substr = item[field].substring(startIndex, startIndex + 30);
           temp.match = __spreadProps(__spreadValues({}, temp.match), { [field]: substr });
           temp.score += count / words;
-          temp.count = __spreadProps(__spreadValues({}, temp.count), { [field]: count / words });
         }
       });
       if (temp.match) {
@@ -49,11 +49,13 @@ var Search = class {
       }
     });
     results.sort((a, b) => b.score - a.score);
+    if (results.length > limit) {
+      return results.slice(0, limit);
+    }
     return results;
   }
 };
-var search_default = Search;
 export {
-  search_default as ExactSearch
+  Search as ExactSearch
 };
 //# sourceMappingURL=index.mjs.map

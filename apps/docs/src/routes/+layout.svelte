@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '$styles/app.css';
 	import { Sidebar, Navbar, Background, Footer, Search } from '$components';
-	import { sidebarShowing, visibleIds } from '$lib/stores';
-	import { onDestroy, onMount } from 'svelte';
+	import { sidebarShowing } from '$lib/stores';
+	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { getVisibleSections } from '$lib/dom';
 
@@ -35,7 +35,8 @@
 </div>
 
 <!-- Mobile Screen -->
-<div
+<button
+	on:click={() => sidebarShowing.set(false)}
 	class="lg:hidden absolute z-40 top-16 inset-0 bg-opacity-50 transition-all ease-in-out duration-500 backdrop-filter backdrop-blur-sm {$sidebarShowing
 		? 'opacity-100 pointer-events-auto'
 		: 'opacity-0 pointer-events-none'}"

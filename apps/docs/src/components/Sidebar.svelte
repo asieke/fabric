@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { visibleIds } from '$lib/stores';
+	import { visibleIds, sidebarShowing } from '$lib/stores';
 	import { page } from '$app/stores';
 	import type { Section } from '$lib/types';
 
@@ -30,18 +30,28 @@
 		const id = section.toLowerCase().replace(/ /g, '-');
 		const el = document.getElementById(id);
 		el?.scrollIntoView({ block: 'start' });
+		if ($sidebarShowing) {
+			sidebarShowing.set(false);
+		}
 	};
 </script>
 
 {#if sections}
-	<nav class=" h-full p-8 prose dark:prose-invert">
+	<nav class="h-full prose dark:prose-invert px-8">
+		<div class="my-0 p-0 lg:flex flex-row items-center h-16 hidden">
+			<img src="images/logo.png" alt="logo" class="my-0 h-5 w-5 rounded-md shadow-sm" />
+			<div class="text-xl font-bold tracking-tighter pl-2">Fabric SDK</div>
+		</div>
 		<h3>Guides</h3>
-		<ul class="border-l-[2px] border-zinc-100 dark:border-zinc-800">
+
+		<ul class=" dark:border-zinc-800 relative">
+			<div class="absolute w-[1px] -left-[1px] h-full bg-slate-200 dark:bg-slate-700 z-40" />
 			{#each links as { title, slug }}
 				<li class="relative">
 					<a href="/{slug}">{title}</a>
+
 					{#if slug === currentPage}
-						<div class="absolute top-1 -left-[6px] bg-emerald-500 w-[2px] h-5" />
+						<div class="absolute z-50 top-1 -left-[5px] bg-emerald-500 w-[1px] h-5" />
 						<ul>
 							{#each currentSections as { title, sectionId }}
 								<li
@@ -76,7 +86,7 @@
 	}
 
 	.visible {
-		@apply bg-slate-100 dark:bg-zinc-900;
+		@apply bg-zinc-100 pl-[38px] -ml-8 dark:bg-zinc-800/50;
 	}
 
 	.first {

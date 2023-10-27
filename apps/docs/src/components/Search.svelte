@@ -2,35 +2,19 @@
 	import { searchShowing } from '$lib/stores';
 	import { clickOutside } from '$lib/dom';
 	import type { Section } from '$lib/types';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	import { Search } from 'lucide-svelte';
-	import { ExactSearch } from 'exact-search';
-	// import MiniSearch from 'minisearch';
+	import { ExactSearch, type Result } from 'exact-search';
+	import { SearchResults } from '$components';
+	import { goto } from '$app/navigation';
+
+	export let sections: Section[];
 
 	let input: HTMLInputElement;
 	let index: ExactSearch;
-	export let sections: Section[];
-
-	console.log(sections);
-
-	// let miniSearch = new MiniSearch({
-	// 	fields: ['title', 'content'], // fields to index for full-text search
-	// 	storeFields: ['id', 'title', 'slug', 'sectionId', 'content'], // fields to return with search results
-	// 	searchOptions: {
-	// 		boost: { title: 2 },
-	// 		prefix: true,
-	// 		fuzzy: 0
-	// 	}
-	// });
-
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	// import { Index } from 'flexsearch';
-	// const index = new Index('score');
-
-	const getResults = (query: string) => {
-		return index.search(query);
-	};
+	let results: Result[] | null = null;
+	let query: string = '';
+	let highlight = 0;
 
 	const handleClickOutside = () => {
 		searchShowing.set(false);
@@ -58,11 +42,53 @@
 		});
 	});
 
-	const search = () => {
-		if (input) {
+	const updateHighlight = (i: number) => {
+		highlight = i;
+	};
+
+	const navigateToResult = (i: number) => {
+		if (!results || !results[i]) return;
+		const result = results[i];
+		highlight = 0;
+		results = null;
+		query = '';
+		//navigate to the result
+		goto(`${result.slug}#${result.sectionId}`);
+		searchShowing.set(false);
+	};
+
+	const handleKeyPress = (e: KeyboardEvent) => {
+		//if its the arrow down key and highlight < results.length - 1
+		if (results && e.key === 'ArrowDown') {
+			if (highlight < results.length - 1) {
+				highlight++;
+			} else {
+				highlight = 0;
+			}
+		}
+
+		//if its the arrow up key and highlight > 0
+		if (results && e.key === 'ArrowUp') {
+			if (highlight > 0) {
+				highlight--;
+			} else {
+				highlight = results.length - 1;
+			}
+		}
+
+		//if the enter key is pressed
+		if (results && e.key === 'Enter') {
+			navigateToResult(highlight);
+		}
+
+		if (!input || query.length < 2) {
+			results = null;
+			return;
+		}
+		if (input && query.length >= 2) {
 			// const results = miniSearch.search(query);
-			const results = getResults(input.value);
-			console.log('Search Results', results);
+			results = index.search(query, 5);
+			console.log('Search Results', query, results);
 		}
 	};
 </script>
@@ -71,16 +97,26 @@
 	<div class="absolute w-full h-full bg-black/50 z-50 backdrop-blur-sm">
 		<div
 			use:clickOutside={handleClickOutside}
-			class="border border-slate-700 flex flex-row items-center fixed z-50 top-16 w-[40%] left-[30%] p-3 px-3 bg-white dark:bg-zinc-900 shadow-lg rounded-md"
+			class="outline-[1px] outline-slate-500 dark:border-slate-700 fixed z-50 top-16 w-[40%] left-[30%] shadow-lg rounded-md"
 		>
-			<Search class="text-slate-500 h-4 w-4 mr-2" />
-			<input
-				bind:this={input}
-				on:keyup={search}
-				type="text"
-				class="border-0 outline-none ring-0 w-full bg-white dark:bg-zinc-900 text-black dark:text-white text-sm"
-				placeholder="Find Something"
-			/>
+			<div
+				class="flex flex-row items-center p-3 px-3 bg-zinc-100 dark:bg-zinc-900 {results
+					? 'rounded-t-md border-b dark:border-slate-700'
+					: 'rounded-md'}"
+			>
+				<Search class="text-slate-500 h-4 w-4 mr-2" />
+				<input
+					bind:this={input}
+					on:keyup={(e) => handleKeyPress(e)}
+					bind:value={query}
+					type="text"
+					class="border-0 outline-none ring-0 w-full bg-zinc-100 dark:bg-zinc-900 text-black dark:text-white text-sm"
+					placeholder="Find Something"
+				/>
+			</div>
+			<div class="bg-white rounded-b-md">
+				<SearchResults {results} {query} {highlight} {navigateToResult} {updateHighlight} />
+			</div>
 		</div>
 	</div>
 {/if}

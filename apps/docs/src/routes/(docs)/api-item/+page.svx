@@ -1,0 +1,139 @@
+<script lang="ts">
+	import { CodeGroup, Row, Column } from '$components';
+</script>
+
+# Todo List Search API Documentation
+
+This documentation provides an overview and usage guide for the Todo List Search API. The API allows users to search for todo list items based on various parameters and retrieve the matching items. The API supports multiple programming languages including Python, JavaScript, and PHP.
+
+## Authentication
+
+The Todo List Search API does not require authentication. It is open for public use.
+
+## API Base URL
+
+The base URL for accessing the Todo List Search API is:
+
+`https://api.example.com/todo-search`
+
+## Search Parameters
+
+The Todo List Search API supports the following search parameters:
+
+- `query` (required): The search query string.
+
+## Responses
+
+The API responds with JSON objects containing the search results. The structure of the response is as follows:
+
+
+```json
+{
+  "results": [
+    {
+      "id": "1",
+      "title": "Sample Todo",
+      "description": "This is a sample todo item.",
+      "due_date": "2022-12-31"
+    },
+    {
+      "id": "2",
+      "title": "Another Todo",
+      "description": "This is another todo item.",
+      "due_date": "2023-01-15"
+    }
+  ]
+}
+```
+
+The `results` field contains an array of todo list items that match the search criteria. Each todo item object includes an `id`, `title`, `description`, and `due_date`.
+
+## Examples
+
+<Row>
+<Column width={3}>
+In any productive workflow, managing tasks is crucial. The Update Todo List endpoint offers a powerful tool to modify existing tasks in a todo list. Whether you need to change the task name, update the description, reschedule the due date, or update the completion status, this endpoint caters to your task management requirements efficiently.
+</Column>
+<Column width={7}>
+<CodeGroup langs={['python','javascript','php']}>
+
+```python
+import requests
+
+# Define the search query
+query = 'sample query'
+
+# Construct the API URL
+url = f"https://api.example.com/todo-search?query={query}"
+
+# Send the GET request
+response = requests.get(url)
+
+# Parse the JSON response
+results = response.json()['results']
+
+# Print the results
+for item in results:
+    print(f"ID: {item['id']}")
+    print(f"Title: {item['title']}")
+    print(f"Description: {item['description']}")
+    print(f"Due Date: {item['due_date']}")
+    print()
+```
+
+
+```javascript
+const query = 'sample query';
+
+// Construct the API URL
+const url = `https://api.example.com/todo-search?query=${encodeURIComponent(query)}`;
+
+// Send the GET request using Fetch API
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    const results = data.results;
+    results.forEach(item => {
+      console.log(`ID: ${item.id}`);
+      console.log(`Title: ${item.title}`);
+      console.log(`Description: ${item.description}`);
+      console.log(`Due Date: ${item.due_date}`);
+      console.log();
+    });
+  })
+  .catch(error => console.error(error));
+```
+
+```php
+<?php
+
+$query = 'sample query';
+
+// Construct the API URL
+$url = 'https://api.example.com/todo-search?query=' . urlencode($query);
+
+// Send the GET request using cURL
+$curl = curl_init($url);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($curl);
+curl_close($curl);
+
+// Parse the JSON response
+$data = json_decode($response, true);
+
+// Print the results
+foreach ($data['results'] as $item) {
+    echo "ID: " . $item['id'] . "\n";
+    echo "Title: " . $item['title'] . "\n";
+    echo "Description: " . $item['description'] . "\n";
+    echo "Due Date: " . $item['due_date'] . "\n\n";
+}
+```
+
+</CodeGroup>
+</Column>
+</Row>
+
+## Conclusion
+
+This concludes the documentation for the Todo List Search API. The API allows you to search for todo list items based on a query parameter and retrieve the matching results. You can use the provided code examples in Python, JavaScript, and PHP to integrate the API into your applications.

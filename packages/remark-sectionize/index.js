@@ -30,6 +30,9 @@ function sectionizeHeaders(node, index, parent) {
 
   const between = parent.children.slice(startIndex, endIndex > 0 ? endIndex : undefined);
 
+  const textContent = node.children.map((child) => child.value).join('');
+  const id = textContent.toLowerCase().replace(/ /g, '-');
+
   const section = {
     type: 'section',
     depth: depth,
@@ -37,7 +40,7 @@ function sectionizeHeaders(node, index, parent) {
     data: {
       hName: 'section',
       //add an id to the section
-      hProperties: { id: `section-${startIndex}` }
+      hProperties: { id: id }
     }
   };
 

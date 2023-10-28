@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { goto } from '$app/navigation';
 	import { visibleIds, sidebarShowing } from '$lib/stores';
 	import { page } from '$app/stores';
 	import type { Section } from '$lib/types';
@@ -10,26 +10,36 @@
 	$: currentPage = $page.route.id?.split('/').pop();
 	$: currentSections = sections.filter((section) => section.slug === currentPage);
 
-	let links = [
+	const contents = [
 		{
-			title: 'Getting Started',
-			slug: 'getting-started'
+			name: 'Getting Started',
+			links: [
+				{ title: 'Quick Start', slug: 'quick-start' },
+				{ title: 'SDK', slug: 'sdk' },
+				{ title: 'Weather', slug: 'weather' }
+			]
 		},
 		{
-			title: 'SDK',
-			slug: 'sdk'
-		},
-		{
-			title: 'Weather',
-			slug: 'weather'
+			name: 'API',
+			links: [
+				{ title: 'item', slug: 'api-item' },
+				{ title: 'query', slug: 'api-query' },
+				{ title: 'search', slug: 'api-search' }
+			]
 		}
 	];
 
-	const scrollToSection = (section: string) => {
-		console.log(section);
-		const id = section.toLowerCase().replace(/ /g, '-');
-		const el = document.getElementById(id);
+	const goToSection = (section: string = '') => {
+		console.log(page, section);
+		const el = document.getElementById(section);
 		el?.scrollIntoView({ block: 'start' });
+		if ($sidebarShowing) {
+			sidebarShowing.set(false);
+		}
+	};
+
+	const goToPage = (slug: string = '') => {
+		goto(slug);
 		if ($sidebarShowing) {
 			sidebarShowing.set(false);
 		}
@@ -38,36 +48,44 @@
 
 {#if sections}
 	<nav class="h-full prose dark:prose-invert px-8">
-		<div class="my-0 p-0 lg:flex flex-row items-center h-16 hidden">
+		<button
+			class="my-0 p-0 lg:flex flex-row items-center h-16 hidden text-black"
+			on:click={() => goto('/')}
+		>
 			<img src="images/logo.png" alt="logo" class="my-0 h-5 w-5 rounded-md shadow-sm" />
 			<div class="text-xl font-bold tracking-tighter pl-2">Fabric SDK</div>
-		</div>
-		<h3>Guides</h3>
+		</button>
+		{#each contents as { name, links }}
+			<h3>{name}</h3>
 
-		<ul class=" dark:border-zinc-800 relative">
-			<div class="absolute w-[1px] -left-[1px] h-full bg-slate-200 dark:bg-slate-700 z-40" />
-			{#each links as { title, slug }}
-				<li class="relative">
-					<a href="/{slug}">{title}</a>
+			<ul class=" dark:border-zinc-800 relative">
+				<div class="absolute w-[1px] -left-[1px] h-full bg-slate-200 dark:bg-slate-700 z-40" />
+				{#each links as { title, slug }}
+					<li class="relative">
+						<button
+							class="my-0 text-emerald-500 font-bold hover:opacity-80"
+							on:click={() => goToPage(slug)}>{title}</button
+						>
 
-					{#if slug === currentPage}
-						<div class="absolute z-50 top-1 -left-[5px] bg-emerald-500 w-[1px] h-5" />
-						<ul>
-							{#each currentSections as { title, sectionId }}
-								<li
-									class="{$visibleIds.includes(sectionId) ? 'visible' : ''} {$visibleIds[0] ===
-									sectionId
-										? 'first'
-										: ''} {$visibleIds[$visibleIds.length - 1] === sectionId ? 'last' : ''} my-0"
-								>
-									<button on:click={() => scrollToSection(sectionId)}>{title}</button>
-								</li>
-							{/each}
-						</ul>
-					{/if}
-				</li>
-			{/each}
-		</ul>
+						{#if slug === currentPage}
+							<div class="absolute z-50 top-1 -left-[5px] bg-emerald-500 w-[1px] h-5" />
+							<ul>
+								{#each currentSections as { title, sectionId }}
+									<li
+										class="{$visibleIds.includes(sectionId) ? 'visible' : ''} {$visibleIds[0] ===
+										sectionId
+											? 'first'
+											: ''} {$visibleIds[$visibleIds.length - 1] === sectionId ? 'last' : ''} my-0"
+									>
+										<button on:click={() => goToSection(sectionId)}>{title}</button>
+									</li>
+								{/each}
+							</ul>
+						{/if}
+					</li>
+				{/each}
+			</ul>
+		{/each}
 	</nav>
 {/if}
 

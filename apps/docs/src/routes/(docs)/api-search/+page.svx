@@ -39,10 +39,10 @@ for ($i = 0; $i < 5; $i++) {
 </Column>
 </Row>
 
-## The Boys!
+## The Boys
 
 We are crushing it
 
-## OddlySpecific Title
+## Odd Title
 
 OddlySpecific content

@@ -28,10 +28,10 @@
 				<Menu />
 			{/if}
 		</button>
-		<div class="my-0 p-0 flex flex-row items-center h-16">
+		<button class="my-0 p-0 flex flex-row items-center h-16">
 			<img src="images/logo.png" alt="logo" class="my-0 h-5 w-5 rounded-md shadow-sm" />
 			<div class="text-xl font-bold tracking-tighter pl-2">Fabric SDK</div>
-		</div>
+		</button>
 	</div>
 
 	<!-- Desktop -->

@@ -39,7 +39,7 @@
 	};
 
 	const goToPage = (slug: string = '') => {
-		goto(slug);
+		goto(slug, { noScroll: false });
 		if ($sidebarShowing) {
 			sidebarShowing.set(false);
 		}

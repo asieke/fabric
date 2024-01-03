@@ -10,13 +10,13 @@
 	let currentPage: string;
 
 	export let data;
-
 	const { sections } = data;
 
 	// Add your code here that you want to run when the page route ID changes
 	$: {
 		currentPage = $page.route.id?.split('/').pop() || '';
 		getVisibleSections();
+		if (main) main.scrollTo(0, 0);
 	}
 
 	onMount(() => {
